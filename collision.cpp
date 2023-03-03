@@ -2,58 +2,61 @@
 #include <iostream>
 
 
-// rel = relative. everything will be in relation to that entity's position.
-// thing is the other object we are checking collision against.
-void Collision::CheckCollision(Entity* rel, Entity* thing)
+// First see if there is a collision, then see which edge caused it.
+void Collision::CheckCollision(Entity* player, Entity* enemy)
 {	
-	if (IsOverlap(rel, thing))
+	if (IsOverlap(player, enemy))
 	{
-		rel->color = 0xff0000;
-		CheckEdge(rel, thing);
+		player->color = 0xff0000;
+		CheckEdge(player, enemy);
 	}
 	else
 	{
-		rel->color = 0x00ff00;
+		player->color = 0x00ff00;
 	}
 }
 
 
 // Determine if they are overlapping at all.
-bool Collision::IsOverlap(Entity* rel, Entity* thing)
+bool Collision::IsOverlap(Entity* player, Entity* enemy)
 {
-	return (rel->m_current_location.bottom >= thing->m_current_location.top
-		&& rel->m_current_location.top <= thing->m_current_location.bottom
-		&& rel->m_current_location.left <= thing->m_current_location.right
-		&& rel->m_current_location.right >= thing->m_current_location.left);
+	return (player->m_current_location.bottom >= enemy->m_current_location.top
+		&& player->m_current_location.top <= enemy->m_current_location.bottom
+		&& player->m_current_location.left <= enemy->m_current_location.right
+		&& player->m_current_location.right >= enemy->m_current_location.left);
 }
 
 
 // For each edge, check if there was no overlap previous frame but if there is overlap now.
-// That is the edge of relative-entity that has just crossed into thing-entity.
-void Collision::CheckEdge(Entity* rel, Entity* thing)
+// That is the edge of player that has just crossed into enemy.
+void Collision::CheckEdge(Entity* player, Entity* enemy)
 {
 	// thing (enemy) does not move in this example. but should also use previous position for the first check.
-	if (rel->m_previous_location.bottom < thing->m_current_location.top // Reverse check of IsOverlap (no overlap) using previous position.
-		&& rel->m_current_location.bottom >= thing->m_current_location.top) // Same check as in IsOverlap
+	if (player->m_previous_location.bottom < enemy->m_current_location.top // Reverse check of IsOverlap (no overlap) using previous position.
+		&& player->m_current_location.bottom >= enemy->m_current_location.top) // Same check as in IsOverlap
 	{
-		std::cout << "Hit the top.\n\n";
+		std::cout << "Player bottom made contact.\n\n";
+		return;
 	}
 
-	if (rel->m_previous_location.top > thing->m_current_location.bottom
-		&& rel->m_current_location.top <= thing->m_current_location.bottom)
+	if (player->m_previous_location.top > enemy->m_current_location.bottom
+		&& player->m_current_location.top <= enemy->m_current_location.bottom)
 	{
-		std::cout << "Hit the bottom.\n\n";
+		std::cout << "Player top made contact.\n\n";
+		return;
 	}
 
-	if (rel->m_previous_location.left > thing->m_current_location.right
-		&& rel->m_current_location.left <= thing->m_current_location.right)
+	if (player->m_previous_location.left > enemy->m_current_location.right
+		&& player->m_current_location.left <= enemy->m_current_location.right)
 	{
-		std::cout << "Hit the right.\n\n";
+		std::cout << "Player left made contact.\n\n";
+		return;
 	}
 
-	if (rel->m_previous_location.right < thing->m_current_location.left
-		&& rel->m_current_location.right >= thing->m_current_location.left)
+	if (player->m_previous_location.right < enemy->m_current_location.left
+		&& player->m_current_location.right >= enemy->m_current_location.left)
 	{
-		std::cout << "Hit the left.\n\n";
+		std::cout << "Player right made contact.\n\n";
+		return;
 	}
 }

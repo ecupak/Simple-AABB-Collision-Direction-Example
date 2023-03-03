@@ -1,0 +1,3 @@
+﻿  collision.cpp
+C:\Users\Sab\OneDrive\Documents\Workspace\ecupak\BREDA Projects\Collision test\surface.h(39,18): warning C4244: 'initializing': conversion from 'float' to 'unsigned int', possible loss of data
+  tmpl_2019-08.vcxproj -> C:\Users\Sab\OneDrive\Documents\Workspace\ecupak\BREDA Projects\Collision test\tmpl_2019-08_x86_debug.exe
